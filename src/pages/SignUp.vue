@@ -60,7 +60,7 @@
           </q-input>
           <q-input
             v-model="formData.username"
-            label="Nome de usário *"
+            label="Nome de usuário *"
             rounded
             outlined
             class="q-mb-md"
@@ -81,7 +81,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import PasswordConfirmation from "src/components/PasswordConfirmation.vue";
-import { singUp } from "src/api/userService";
+import { singUp } from "src/api/authService";
 import useNotifications from "src/utils/notificationUtils";
 
 const router = useRouter();
