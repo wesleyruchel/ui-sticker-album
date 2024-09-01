@@ -99,18 +99,18 @@ const formData = ref({
 });
 
 const nameRules = [
-  (val) => (val && val.length > 0) || "É necessário informar um e-mail",
+  (val) => (val && val.length > 0) || "É necessário informar um nome.",
 ];
 
 const emailRules = [
-  (val) => (val && val.length > 0) || "É necessário informar um e-mail",
+  (val) => (val && val.length > 0) || "É necessário informar um e-mail.",
   (val) =>
-    /^\S+@\S+\.\S+$/.test(val) || "É necessário informar um e-mail válido",
+    /^\S+@\S+\.\S+$/.test(val) || "É necessário informar um e-mail válido.",
 ];
 
 const usernameRules = [
   (val) =>
-    (val && val.length > 0) || "É necessário informar um nome de usuário",
+    (val && val.length > 0) || "É necessário informar um nome de usuário.",
 ];
 
 function validSubmit() {
