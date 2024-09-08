@@ -16,6 +16,7 @@
           label="Novo"
           color="primary"
           class="q-ml-sm"
+          to="/edu/album"
         />
       </div>
     </div>
@@ -33,14 +34,26 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-toggle v-model="album.isLocked" label="Bloquear" />
+          <!-- <q-toggle v-model="album.isLocked" label="Bloquear" /> -->
           <q-btn
             icon="share"
             label="Compartilhar"
             color="primary"
             flat
-            @click="shareMagazine(album.id)"
+            @click="handleShareAlbum(album.id)"
           />
+          <q-dialog v-model="icon">
+            <q-card>
+              <q-card-section class="row items-center q-pb-none">
+                <div class="text-h6">Pronto! Compartilhe o código abaixo.</div>
+                <q-space></q-space>
+                <q-btn icon="close" flat round v-close-popup></q-btn>
+              </q-card-section>
+              <q-card-section>
+                <div class="text-h6">{{ shareCode }}</div>
+              </q-card-section>
+            </q-card>
+          </q-dialog>
         </q-card-actions>
       </q-card>
     </div>
@@ -49,28 +62,43 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { fetchAlbums } from "src/api/userService";
+import { Loading, QSpinnerHourglass } from "quasar";
+import { fetchAlbums, shareAlbum } from "src/api/userService";
 import useNotifications from "src/utils/notificationUtils";
 
 const { showSuccessNotification, showErrorNotification } = useNotifications();
 
 const albums = ref({});
+const shareCode = ref("");
+const shareDialog = ref(false);
+const icon = ref(false);
+onMounted(() => {
+  fetchAlbumsData();
+});
 
 const fetchAlbumsData = async () => {
   try {
+    Loading.show({ spinner: QSpinnerHourglass, message: "Carregando..." });
     const { items } = await fetchAlbums();
     albums.value = items;
   } catch (error) {
     console.error(error);
     showErrorNotification(error.message);
+  } finally {
+    Loading.hide();
   }
 };
 
-onMounted(() => {
-  fetchAlbumsData();
-});
-
-const shareMagazine = (id) => {};
+const handleShareAlbum = async (albumId) => {
+  try {
+    const response = await shareAlbum(albumId);
+    if (response) {
+      icon.value = true;
+      shareCode.value = response.data.shareCode;
+      shareDialog.value = true;
+    }
+  } catch (error) {}
+};
 </script>
 
 <style scoped>
