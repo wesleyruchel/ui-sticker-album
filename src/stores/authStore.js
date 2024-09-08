@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: null,
+    user: localStorage.getItem("user") || null,
     accessToken: localStorage.getItem("accessToken") || null,
     refreshToken: localStorage.getItem("refreshToken") || null,
     loading: false,
@@ -13,6 +13,7 @@ export const useAuthStore = defineStore("auth", {
 
   getters: {
     isAuthenticated: (state) => !!state.accessToken,
+    userAuthenticated: (state) => state.user,
   },
 
   actions: {
@@ -37,12 +38,13 @@ export const useAuthStore = defineStore("auth", {
         this.error = null;
         const response = await AuthService.singIn(credentials);
         if (response) {
-          this.accessToken = response.data.token;
+          this.accessToken = response.data.accessToken;
           this.refreshToken = response.data.refreshToken;
-          this.user = getUserInfoByAcessToken(this.accessToken);
+          this.user = getUserInfoByAccessToken(this.accessToken);
           localStorage.setItem("accessToken", this.accessToken);
           localStorage.setItem("refreshToken", this.refreshToken);
           localStorage.setItem("user", this.user);
+          return response;
         }
       } catch (error) {
         this.error = "Falha ao fazer login.";
@@ -56,6 +58,7 @@ export const useAuthStore = defineStore("auth", {
         this.user = null;
         this.accessToken = null;
         this.refreshToken = null;
+        localStorage.removeItem("user");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
       } catch (error) {
@@ -67,12 +70,19 @@ export const useAuthStore = defineStore("auth", {
 
     async refreshAccessToken() {
       try {
-        const refreshToken = this.refreshToken;
-        if (!refreshToken) throw new Error("Refresh token não encontrado.");
-        const response = await AuthService.refreshAcessToken(refreshToken);
+        if (!this.accessToken || !this.refreshAccessToken)
+          throw new Error("Token não encontrado.");
+        const response = await AuthService.refreshAcessToken(
+          this.accessToken,
+          this.refreshToken
+        );
         if (response) {
-          this.accessToken = response.data.token;
+          this.accessToken = response.data.accessToken;
+          this.refreshToken = response.data.refreshToken;
+          this.user = getUserInfoByAcessToken(this.accessToken);
           localStorage.setItem("accessToken", this.accessToken);
+          localStorage.setItem("refreshToken", this.refreshToken);
+          localStorage.setItem("user", this.user);
         }
       } catch (error) {
         this.logout();
@@ -81,7 +91,7 @@ export const useAuthStore = defineStore("auth", {
   },
 });
 
-function getUserInfoByAcessToken(token) {
+function getUserInfoByAccessToken(token) {
   try {
     const decodedToken = jwtDecode(token);
     const userInfo = {

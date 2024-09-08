@@ -6,7 +6,7 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import routes from "./routes";
-import { isAuthenticated, refreshAcessToken } from "src/api/authService";
+import { useAuthStore } from "src/stores/authStore";
 
 /*
  * If not building with SSR mode, you can
@@ -34,15 +34,30 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
+  const publicRoutes = ["/login", "/cadastro"];
+
   Router.beforeEach(async (to, from, next) => {
+    const authStore = useAuthStore();
+
+    if (publicRoutes.includes(to.path)) {
+      return next();
+    }
+
     if (to.meta.requiresAuth) {
-      if (!isAuthenticated()) {
-        const tokenRefreshed = await refreshAcessToken();
-        if (!tokenRefreshed) {
-          return next("/sign-in");
-        }
+      if (!authStore.isAuthenticated) {
+        return next("/login");
+      }
+
+      const userRole = new String(
+        JSON.parse(authStore.userAuthenticated).role
+      ).toLowerCase();
+      const userRolePrefix = userRole == "educador" ? "edu" : "lea";
+
+      if (to.meta.role && to.meta.role !== userRole) {
+        return next(`/${userRolePrefix}/inicio`);
       }
     }
+
     next();
   });
 

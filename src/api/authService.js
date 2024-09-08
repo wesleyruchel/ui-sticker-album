@@ -31,9 +31,12 @@ export const AuthService = {
     }
   },
 
-  async refreshAcessToken(refreshToken) {
+  async refreshAcessToken(acessToken, refreshToken) {
     try {
-      const response = await api.post("/auth/refresh-token", { refreshToken });
+      const response = await api.post("/auth/refresh-token", {
+        acessToken,
+        refreshToken,
+      });
       return formatSuccess(response);
     } catch (error) {
       console.error("Erro ao tentar atualizar o token:", error);

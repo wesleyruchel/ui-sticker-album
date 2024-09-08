@@ -56,7 +56,7 @@ const handleSubmit = async () => {
     const response = await authStore.login(credentials.value);
     if (response) {
       showSuccessNotification(response.message);
-      router.push("/profile");
+      router.push("/inicio");
     }
   } catch (error) {
     showErrorNotification(error.message);
