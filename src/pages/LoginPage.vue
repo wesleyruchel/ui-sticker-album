@@ -4,15 +4,20 @@
       <q-card-section>
         <q-form @submit.prevent.stop="handleSubmit">
           <q-input
-            v-model="formData.username"
+            v-model="credentials.username"
             label="Nome de usuário"
             rounded
             outlined
             class="q-mb-md"
           />
-          <PasswordInput v-model="formData" />
+          <PasswordInput v-model="credentials" />
           <div class="row justify-center">
-            <q-btn label="Acessar" type="submit" color="primary" />
+            <q-btn
+              label="Acessar"
+              type="submit"
+              color="primary"
+              :loading="authStore.loading"
+            />
           </div>
           <div class="row justify-center">
             <router-link to="/forgot-password" class="text-primary q-mt-md"
@@ -34,24 +39,27 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import PasswordInput from "src/components/PasswordInput.vue";
-import { singIn } from "src/api/authService";
 import useNotifications from "src/utils/notificationUtils";
+import { useAuthStore } from "src/stores/authStore";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const { showSuccessNotification, showErrorNotification } = useNotifications();
 
-const formData = ref({
+const credentials = ref({
   username: "",
   password: "",
 });
 
-async function handleSubmit() {
+const handleSubmit = async () => {
   try {
-    const res = await singIn(formData);
-    showSuccessNotification(res.message);
-    router.push("/profile");
+    const response = await authStore.login(credentials.value);
+    if (response) {
+      showSuccessNotification(response.message);
+      router.push("/profile");
+    }
   } catch (error) {
     showErrorNotification(error.message);
   }
-}
+};
 </script>
