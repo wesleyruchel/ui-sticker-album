@@ -5,6 +5,8 @@ import { jwtDecode } from "jwt-decode";
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: localStorage.getItem("user") || null,
+    userRole: null,
+    userRolePrefix: null,
     accessToken: localStorage.getItem("accessToken") || null,
     refreshToken: localStorage.getItem("refreshToken") || null,
     loading: false,
@@ -13,7 +15,13 @@ export const useAuthStore = defineStore("auth", {
 
   getters: {
     isAuthenticated: (state) => !!state.accessToken,
-    userAuthenticated: (state) => state.user,
+    userAuth: (state) => JSON.parse(state.user),
+    userAuthRole: (state) =>
+      new String(JSON.parse(state.user).role).toLowerCase(),
+    userAuthRolePrefix: (state) =>
+      new String(JSON.parse(state.user).role).toLowerCase() == "educador"
+        ? "edu"
+        : "lea",
   },
 
   actions: {
@@ -27,6 +35,7 @@ export const useAuthStore = defineStore("auth", {
         }
       } catch (error) {
         this.error = "Falha ao cadastrar o usuário.";
+        throw error;
       } finally {
         this.loading = false;
       }
@@ -48,12 +57,13 @@ export const useAuthStore = defineStore("auth", {
         }
       } catch (error) {
         this.error = "Falha ao fazer login.";
+        throw error;
       } finally {
         this.loading = false;
       }
     },
 
-    async logout() {
+    logout() {
       try {
         this.user = null;
         this.accessToken = null;
@@ -62,8 +72,8 @@ export const useAuthStore = defineStore("auth", {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
       } catch (error) {
-        console.error("Erro ao sair.", error);
         this.error = "Erro ao sair.";
+        throw error;
       } finally {
       }
     },
@@ -79,7 +89,7 @@ export const useAuthStore = defineStore("auth", {
         if (response) {
           this.accessToken = response.data.accessToken;
           this.refreshToken = response.data.refreshToken;
-          this.user = getUserInfoByAcessToken(this.accessToken);
+          this.user = getUserInfoByAccessToken(this.accessToken);
           localStorage.setItem("accessToken", this.accessToken);
           localStorage.setItem("refreshToken", this.refreshToken);
           localStorage.setItem("user", this.user);
@@ -103,7 +113,6 @@ function getUserInfoByAccessToken(token) {
     };
     return JSON.stringify(userInfo);
   } catch (error) {
-    console.error("Ocorreu um erro ao decodificar o token:", error);
     return {};
   }
 }
