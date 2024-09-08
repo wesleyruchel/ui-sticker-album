@@ -1,6 +1,9 @@
 <template>
   <q-page class="padding">
     <q-card class="q-pa-md">
+      <div class="row items-center justify-between q-mt-md q-mb-md q-mx-md">
+        <q-btn rounded color="primary" label="Voltar" @click="goToBack" />
+      </div>
       <q-card-section>
         <q-form @submit.prevent="handleSubmit">
           <q-input
@@ -33,9 +36,14 @@
               </q-icon>
             </template>
           </q-input>
+          <div class="row justify-end q-pb-md">
+            <q-btn label="Alterar dados" type="submit" color="primary" />
+          </div>
+        </q-form>
+        <q-form @submit.prevent="handleSubmitChangePassword">
           <PasswordConfirmation v-model="formData" />
           <div class="row justify-end">
-            <q-btn label="Atualizar" type="submit" color="primary" />
+            <q-btn label="Alterar senha" type="submit" color="primary" />
           </div>
         </q-form>
       </q-card-section>
@@ -45,20 +53,30 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import PasswordConfirmation from "src/components/PasswordConfirmation.vue";
 import useNotifications from "src/utils/notificationUtils";
 
+const router = useRouter();
 const { showSuccessNotification, showErrorNotification } = useNotifications();
 
 const formData = ref({
-  name: "",
-  email: "",
+  name: "NÃO IMPLEMENTADO",
+  email: "NAOIMPLEMENTADO@EXEMPLO.COM",
   bornDate: "",
   password: "",
   confirmPassword: "",
 });
 
-function handleSubmit() {
+const goToBack = () => {
+  router.back();
+};
+
+const handleSubmit = async () => {
   showErrorNotification("Oops...");
-}
+};
+
+const handleSubmitChangePassword = async () => {
+  showErrorNotification("Oops...");
+};
 </script>
