@@ -1,12 +1,12 @@
 import { api } from "src/boot/axios";
 import { formatSuccess, formatError } from "src/utils/httpUtils";
+import { sqlServerDateTimeFormat } from "src/utils/common";
 
 export const AuthService = {
   async singUp(user) {
     try {
       user.bornDate =
         user.bornDate === null ? null : sqlServerDateTimeFormat(user.bornDate);
-
       const response = await api.post("/auth/sign-up", user, {
         headers: {
           "Content-Type": "application/json",
@@ -39,14 +39,7 @@ export const AuthService = {
       });
       return formatSuccess(response);
     } catch (error) {
-      console.error("Erro ao tentar atualizar o token:", error);
-      return false;
+      throw formatError(error);
     }
   },
 };
-
-function sqlServerDateTimeFormat(dateString) {
-  const date = new Date(dateString);
-  const isoString = date.toISOString();
-  return isoString.split("T")[0] + "T00:00:00";
-}
