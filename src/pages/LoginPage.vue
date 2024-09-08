@@ -20,12 +20,12 @@
             />
           </div>
           <div class="row justify-center">
-            <router-link to="/forgot-password" class="text-primary q-mt-md"
+            <router-link to="/esqueceu-a-senha" class="text-primary q-mt-md"
               >Esqueceu a senha?</router-link
             >
           </div>
           <div class="row justify-center">
-            <router-link to="/sign-up" class="text-primary q-mt-md"
+            <router-link to="/cadastro" class="text-primary q-mt-md"
               >Cadastre-se</router-link
             >
           </div>
@@ -41,6 +41,7 @@ import { useRouter } from "vue-router";
 import PasswordInput from "src/components/PasswordInput.vue";
 import useNotifications from "src/utils/notificationUtils";
 import { useAuthStore } from "src/stores/authStore";
+import { getDynamicRoute } from "src/utils/routeHelpers";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -56,7 +57,7 @@ const handleSubmit = async () => {
     const response = await authStore.login(credentials.value);
     if (response) {
       showSuccessNotification(response.message);
-      router.push("/inicio");
+      router.push(getDynamicRoute("inicio"));
     }
   } catch (error) {
     showErrorNotification(error.message);

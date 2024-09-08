@@ -5,20 +5,20 @@
         <q-form @submit.prevent.stop="handleSubmit">
           <div class="row justify-center">
             <q-radio
-              v-model="formData.type"
+              v-model="userData.type"
               val="Educador"
               label="Educador"
               class="q-mb-md"
             />
             <q-radio
-              v-model="formData.type"
+              v-model="userData.type"
               val="Aprendiz"
               label="Aprendiz"
               class="q-mb-md"
             />
           </div>
           <q-input
-            v-model="formData.firstName"
+            v-model="userData.firstName"
             label="Nome *"
             rounded
             outlined
@@ -27,14 +27,14 @@
             :rules="nameRules"
           />
           <q-input
-            v-model="formData.lastName"
+            v-model="userData.lastName"
             label="Sobrenome"
             rounded
             outlined
             class="q-mb-md"
           />
           <q-input
-            v-model="formData.email"
+            v-model="userData.email"
             label="E-mail *"
             rounded
             outlined
@@ -43,7 +43,7 @@
             :rules="emailRules"
           />
           <q-input
-            v-model="formData.bornDate"
+            v-model="userData.bornDate"
             label="Data nascimento"
             rounded
             outlined
@@ -53,13 +53,13 @@
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy>
-                  <q-date v-model="formData.bornDate" mask="DD/MM/YYYY" />
+                  <q-date v-model="userData.bornDate" mask="DD/MM/YYYY" />
                 </q-popup-proxy>
               </q-icon>
             </template>
           </q-input>
           <q-input
-            v-model="formData.username"
+            v-model="userData.username"
             label="Nome de usuário *"
             rounded
             outlined
@@ -67,7 +67,7 @@
             lazy-rules
             :rules="usernameRules"
           />
-          <PasswordConfirmation v-model="formData" />
+          <PasswordConfirmation v-model="userData" />
           <div class="row justify-end">
             <q-btn label="Criar conta" type="submit" color="primary" />
           </div>
@@ -80,14 +80,15 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "src/stores/authStore";
 import PasswordConfirmation from "src/components/PasswordConfirmation.vue";
-import { singUp } from "src/api/authService";
 import useNotifications from "src/utils/notificationUtils";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const { showSuccessNotification, showErrorNotification } = useNotifications();
 
-const formData = ref({
+const userData = ref({
   type: "",
   firstName: "",
   lastName: "",
@@ -114,23 +115,23 @@ const usernameRules = [
 ];
 
 function validSubmit() {
-  if (formData.value.type.trim() === "") {
+  if (userData.value.type.trim() === "") {
     showErrorNotification("Por favor, selecione um tipo para criar o usuário.");
     return false;
   }
   return true;
 }
 
-async function handleSubmit() {
+const handleSubmit = async () => {
   try {
     if (validSubmit()) {
-      const res = await singUp(formData);
-      showSuccessNotification(res.message);
-      router.push("/sign-in");
+      const response = await authStore.register(userData.value);
+      showSuccessNotification(response.message);
+      router.push("/login");
     }
   } catch (error) {
     console.error(error);
     showErrorNotification(error.message);
   }
-}
+};
 </script>
