@@ -45,7 +45,7 @@ import { getDynamicRoute } from "src/utils/routeHelpers";
 
 const router = useRouter();
 const authStore = useAuthStore();
-const { showSuccessNotification, showErrorNotification } = useNotifications();
+const { showErrorNotification } = useNotifications();
 
 const credentials = ref({
   username: "",
@@ -56,7 +56,6 @@ const handleSubmit = async () => {
   try {
     const response = await authStore.login(credentials.value);
     if (response) {
-      showSuccessNotification(response.message);
       router.push(getDynamicRoute("inicio"));
     }
   } catch (error) {
