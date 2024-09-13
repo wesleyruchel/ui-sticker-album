@@ -5,8 +5,8 @@ import {
   createWebHistory,
   createWebHashHistory,
 } from "vue-router";
-import routes from "./routes";
 import { useAuthStore } from "src/stores/authStore";
+import routes from "./routes";
 
 /*
  * If not building with SSR mode, you can
@@ -48,13 +48,8 @@ export default route(function (/* { store, ssrContext } */) {
         return next("/login");
       }
 
-      const userRole = new String(
-        JSON.parse(authStore.userAuthenticated).role
-      ).toLowerCase();
-      const userRolePrefix = userRole == "educador" ? "edu" : "lea";
-
-      if (to.meta.role && to.meta.role !== userRole) {
-        return next(`/${userRolePrefix}/inicio`);
+      if (to.meta.role && to.meta.role !== authStore.userAuthRole) {
+        return next(`/${authStore.userAuthRolePrefix}/inicio`);
       }
     }
 
