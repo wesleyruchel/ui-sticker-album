@@ -45,7 +45,7 @@
           icon="close"
           label="Cancelar"
           color="primary"
-          @click="stopCamera"
+          @click="cancel"
           class="full-width q-mt-sm"
         />
       </q-card-actions>
@@ -63,7 +63,7 @@ const props = defineProps({
   isOpen: Boolean,
 });
 
-const emit = defineEmits(["photo-captured"]);
+const emit = defineEmits(["photo-captured", "close"]);
 const isModalOpen = ref(props.isOpen);
 const enableCamera = ref(false);
 const cameraStart = ref(false);
@@ -72,6 +72,12 @@ const track = ref(null);
 const photoTaken = ref(false);
 const capturedImage = ref(null);
 const videoplayRef = ref(null);
+
+onMounted(() => {
+  if (navigator.mediaDevices.getUserMedia) {
+    enableCamera.value = true;
+  }
+});
 
 const useCamera = async () => {
   try {
@@ -118,6 +124,14 @@ const stopCamera = () => {
   }
 };
 
+const cancel = () => {
+  emit("close");
+  stopCamera();
+  isModalOpen.value = false;
+  photoTaken.value = false;
+  capturedImage.value = null;
+};
+
 const retry = () => {
   photoTaken.value = false;
   capturedImage.value = null;
@@ -127,6 +141,8 @@ const retry = () => {
 const confirmPhoto = () => {
   emit("photo-captured", capturedImage.value);
   isModalOpen.value = false;
+  photoTaken.value = false;
+  capturedImage.value = null;
 };
 
 watch(
@@ -138,12 +154,6 @@ watch(
     }
   }
 );
-
-onMounted(() => {
-  if (navigator.mediaDevices.getUserMedia) {
-    enableCamera.value = true;
-  }
-});
 </script>
 
 <style scoped>

@@ -89,6 +89,7 @@
   <CameraModal
     :isOpen="cameraModalOpen"
     @photo-captured="handlePhotoCaptured"
+    @close="handleCloseCameraModal"
   />
 
   <input
@@ -226,6 +227,7 @@ const capturedImage = ref(null);
 
 const captureImage = async (stickerId) => {
   cameraModalOpen.value = true;
+  capturedImage.value = null;
   handlerSticker.value.id = stickerId;
 };
 
@@ -249,6 +251,7 @@ const handlePhotoCaptured = async (photo) => {
       if (posted) {
         userStickersImages.value[handlerSticker.value.id] = photo;
         showSuccessNotification("Uhul! Nova figurinha adicionada!");
+        capturedImage.value = null;
       }
     }
   } catch (error) {
@@ -256,6 +259,10 @@ const handlePhotoCaptured = async (photo) => {
   } finally {
     HandlerLoading.hide();
   }
+};
+
+const handleCloseCameraModal = () => {
+  cameraModalOpen.value = false;
 };
 </script>
 
