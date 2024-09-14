@@ -16,7 +16,7 @@
           label="Novo"
           color="primary"
           class="q-ml-sm"
-          to="/edu/album"
+          @click="goToNewAlbum()"
         />
       </div>
     </div>
@@ -32,9 +32,14 @@
           <div class="text-h6">{{ album.title }}</div>
           <div class="text-subtitle1 q-mb-sm">{{ album.description }}</div>
         </q-card-section>
-
         <q-card-actions align="right">
-          <!-- <q-toggle v-model="album.isLocked" label="Bloquear" /> -->
+          <q-btn
+            icon="edit"
+            label="Editar"
+            color="primary"
+            flat
+            @click="goToEditAlbum(album.id)"
+          />
           <q-btn
             icon="share"
             label="Compartilhar"
@@ -62,31 +67,42 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { Loading, QSpinnerHourglass } from "quasar";
+import { useRouter } from "vue-router";
 import { fetchAlbums, shareAlbum } from "src/api/userService";
+import { HandlerLoading } from "src/utils/loaderUtils";
 import useNotifications from "src/utils/notificationUtils";
 
-const { showSuccessNotification, showErrorNotification } = useNotifications();
+const router = useRouter();
+const { showErrorNotification } = useNotifications();
 
 const albums = ref({});
 const shareCode = ref("");
 const shareDialog = ref(false);
 const icon = ref(false);
+
 onMounted(() => {
   fetchAlbumsData();
 });
 
 const fetchAlbumsData = async () => {
   try {
-    Loading.show({ spinner: QSpinnerHourglass, message: "Carregando..." });
+    HandlerLoading.show("Aguarde... Estamos carregando seus álbuns...");
     const { items } = await fetchAlbums();
     albums.value = items;
   } catch (error) {
     console.error(error);
     showErrorNotification(error.message);
   } finally {
-    Loading.hide();
+    HandlerLoading.hide();
   }
+};
+
+const goToNewAlbum = () => {
+  router.push(`album/`);
+};
+
+const goToEditAlbum = (albumId) => {
+  router.push(`album/${albumId}`);
 };
 
 const handleShareAlbum = async (albumId) => {
