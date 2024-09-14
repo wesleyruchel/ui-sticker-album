@@ -277,10 +277,6 @@ const beforeEdit = ref({
   cardStickerDescription: "",
 });
 
-const changeImage = () => {
-  albumData.value.imageUrl = "";
-};
-
 const fileInput = ref(null);
 
 const uploadImage = async () => {
