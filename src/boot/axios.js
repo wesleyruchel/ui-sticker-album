@@ -9,8 +9,8 @@ import { useAuthStore } from "src/stores/authStore";
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: "https://api.example.com",
-  timeout: 10000,
+  baseURL: import.meta.env.VITE_API_STICKER_ALBUM_URL,
+  timeout: 100000,
 });
 
 api.interceptors.request.use(
