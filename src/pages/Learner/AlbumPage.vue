@@ -51,8 +51,9 @@
           </q-img>
         </q-card-section>
         <q-card-section>
-          <div class="items-center justify-between q-mt-md q-mb-md">
+          <div class="row q-gutter-sm">
             <q-btn
+              class="col"
               rounded
               color="primary"
               label="Carregar"
@@ -60,6 +61,7 @@
               @click="uploadImage(sticker.id)"
             />
             <q-btn
+              class="col"
               rounded
               color="primary"
               label="Capturar"
