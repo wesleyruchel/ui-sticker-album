@@ -9,6 +9,7 @@
           label="Corrigir"
           color="primary"
           class="q-ml-sm"
+          @click="goToCorrection()"
         />
         <q-btn
           unelevated
@@ -95,6 +96,10 @@ const fetchAlbumsData = async () => {
   } finally {
     HandlerLoading.hide();
   }
+};
+
+const goToCorrection = () => {
+  router.push(`corrigir`);
 };
 
 const goToNewAlbum = () => {

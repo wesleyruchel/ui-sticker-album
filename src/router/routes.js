@@ -31,6 +31,11 @@ const routes = [
         meta: { requiresAuth: true, role: "educador" },
       },
       {
+        path: "edu/corrigir",
+        component: () => import("pages/Educator/StickerCorrectionPage.vue"),
+        meta: { requiresAuth: true, role: "educador" },
+      },
+      {
         path: "lea/inicio",
         component: () => import("pages/Learner/HomePage.vue"),
         meta: { requiresAuth: true, role: "aprendiz" },
