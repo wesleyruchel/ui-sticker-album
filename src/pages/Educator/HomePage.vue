@@ -21,6 +21,7 @@
         />
       </div>
     </div>
+    <q-separator class="q-my-md q-mx-md" />
     <div class="q-mx-md">
       <q-card
         v-for="album in albums"
