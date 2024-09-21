@@ -4,19 +4,19 @@
       <div class="text-h5">Meus álbums</div>
       <div>
         <q-btn
-          unelevated
           rounded
           label="Corrigir"
           color="primary"
-          class="q-ml-sm"
+          class="q-ml-sm q-mt-sm button"
+          icon="rule"
           @click="goToCorrection()"
         />
         <q-btn
-          unelevated
           rounded
           label="Novo"
           color="primary"
-          class="q-ml-sm"
+          class="q-ml-sm q-mt-sm button"
+          icon="add_circle"
           @click="goToNewAlbum()"
         />
       </div>
@@ -134,5 +134,12 @@ const handleShareAlbum = async (albumId) => {
 .q-mx-md {
   margin-left: 30px;
   margin-right: 30px;
+}
+
+.button {
+  width: 150px;
+  height: 36px;
+  min-width: 150px;
+  max-width: 150px;
 }
 </style>
