@@ -3,7 +3,14 @@
     <div class="row items-center justify-between q-mt-md q-mb-md q-mx-md">
       <div class="text-h5">{{ albumName }}</div>
       <div>
-        <q-btn rounded color="primary" label="Início" @click="goToHome" />
+        <q-btn
+          rounded
+          color="primary"
+          class="button"
+          icon="home"
+          label="Início"
+          @click="goToHome"
+        />
       </div>
     </div>
     <div class="row q-gutter-md section-card" flat bordered>
@@ -36,16 +43,15 @@
           </div>
         </q-card-section>
         <q-card-section>
-          <q-img
-            :src="
-              userStickersImages[sticker.id]
-                ? userStickersImages[sticker.id]
-                : 'https://cdn.quasar.dev/img/parallax2.jpg'
-            "
-          >
+          <q-img :src="userStickersImages[sticker.id]">
             <template v-slot:error>
               <div class="q-pa-md flex flex-center full-width full-height">
-                <q-icon name="camera" color="grey-4" />
+                <q-icon name="warning" size="64px" color="grey-4" />
+              </div>
+            </template>
+            <template v-if="!userStickersImages[sticker.id]">
+              <div class="q-pa-md flex flex-center full-width full-height">
+                <q-icon name="add_photo_alternate" size="64px" color="grey-4" />
               </div>
             </template>
           </q-img>
@@ -292,5 +298,12 @@ const handleCloseCameraModal = () => {
 .section-card {
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.button {
+  width: 150px;
+  height: 36px;
+  min-width: 150px;
+  max-width: 150px;
 }
 </style>
