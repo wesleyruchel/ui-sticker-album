@@ -4,6 +4,7 @@
       <q-card-section>
         <q-form @submit.prevent.stop="handleSubmit">
           <q-input
+            required
             v-model="credentials.username"
             label="Nome de usuário"
             rounded
@@ -16,6 +17,7 @@
               label="Acessar"
               type="submit"
               color="primary"
+              rounded
               :loading="authStore.loading"
             />
           </div>

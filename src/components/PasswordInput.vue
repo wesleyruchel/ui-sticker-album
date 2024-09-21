@@ -1,6 +1,7 @@
 <template>
   <div>
     <q-input
+      required
       v-model="password"
       label="Senha"
       :type="isPwd ? 'password' : 'text'"
