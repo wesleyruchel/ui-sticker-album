@@ -1,8 +1,15 @@
 <template>
   <q-page class="q-pa-md">
     <div class="row items-center justify-between q-mt-md q-mb-md q-mx-md">
-      <div class="text-h3">{{ albumId ? "Editar" : "Criar" }} Álbum</div>
-      <q-btn rounded color="primary" label="Início" @click="goToHome" />
+      <div class="text-h4">{{ albumId ? "Editar" : "Criar" }} Álbum</div>
+      <q-btn
+        rounded
+        color="primary"
+        class="button"
+        icon="home"
+        label="Início"
+        @click="goToHome"
+      />
     </div>
     <q-separator class="q-my-md q-mx-md" />
     <form @submit.prevent.stop="handleFormAlbumAction">
@@ -68,6 +75,7 @@
       <div class="row justify-end q-pa-md q-mx-md">
         <q-btn
           rounded
+          class="button"
           color="primary"
           :label="
             albumId ? (albumData.editable ? 'Salvar' : 'Editar') : 'Criar novo'
@@ -133,6 +141,7 @@
               <q-btn
                 rounded
                 color="primary"
+                :disable="!albumId"
                 :label="formSticker.editable ? 'Salvar' : 'Criar nova'"
                 :icon="formSticker.editable ? 'save' : 'add'"
                 @click="handleFormStickerAction('add')"
@@ -152,7 +161,7 @@
         </q-card>
       </form>
       <div class="row items-center justify-between q-mt-md q-mb-md">
-        <div class="text-h4">Figurinhas</div>
+        <div class="text-h4">Figurinhas do álbum</div>
       </div>
       <div v-for="(card, index) in stickersAlbum" :key="index" class="q-mb-md">
         <q-card class="q-mb-md rounded-card">
@@ -523,6 +532,10 @@ const removeSticker = async (index) => {
   font-weight: bold;
 }
 
+.text-h4 {
+  font-weight: bold;
+}
+
 .rounded-card {
   border-radius: 12px;
 }
@@ -532,19 +545,16 @@ const removeSticker = async (index) => {
   margin-right: 30px;
 }
 
+.button {
+  width: 150px;
+  height: 36px;
+  min-width: 150px;
+  max-width: 150px;
+}
+
 .image-container {
   width: 350px;
   height: 400px;
   position: relative;
-}
-
-.relative-position {
-  position: relative;
-}
-
-.absolute-bottom-right {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
 }
 </style>
