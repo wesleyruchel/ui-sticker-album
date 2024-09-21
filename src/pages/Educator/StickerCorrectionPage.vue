@@ -3,7 +3,14 @@
     <div class="row items-center justify-between q-mt-md q-mb-md q-mx-md">
       <div class="text-h5">Correções</div>
       <div>
-        <q-btn rounded color="primary" label="Início" @click="goToHome" />
+        <q-btn
+          rounded
+          color="primary"
+          class="button"
+          icon="home"
+          label="Início"
+          @click="goToHome"
+        />
       </div>
     </div>
     <q-separator class="q-my-md q-mx-md" />
@@ -213,5 +220,12 @@ const reproveSticker = async (stickerId, index) => {
 .section-card {
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.button {
+  width: 150px;
+  height: 36px;
+  min-width: 150px;
+  max-width: 150px;
 }
 </style>
