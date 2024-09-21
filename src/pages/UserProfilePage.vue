@@ -2,7 +2,13 @@
   <q-page class="padding">
     <q-card class="q-pa-md">
       <div class="row items-center justify-between q-mt-md q-mb-md q-mx-md">
-        <q-btn rounded color="primary" label="Voltar" @click="goToBack" />
+        <q-btn
+          rounded
+          color="primary"
+          icon="arrow_back"
+          label="Voltar"
+          @click="goToBack"
+        />
       </div>
       <q-card-section>
         <q-form @submit.prevent="handleSubmit">
@@ -49,7 +55,12 @@
           </q-input>
 
           <div class="row justify-end q-pb-md">
-            <q-btn label="Alterar dados" type="submit" color="primary" />
+            <q-btn
+              label="Alterar dados"
+              type="submit"
+              rounded
+              color="primary"
+            />
           </div>
         </q-form>
         <q-form @submit.prevent="handleSubmitChangePassword">
@@ -63,7 +74,12 @@
           />
           <PasswordConfirmation v-model="userData" />
           <div class="row justify-end">
-            <q-btn label="Alterar senha" type="submit" color="primary" />
+            <q-btn
+              label="Alterar senha"
+              type="submit"
+              rounded
+              color="primary"
+            />
           </div>
         </q-form>
       </q-card-section>
