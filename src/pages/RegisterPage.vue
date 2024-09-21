@@ -69,7 +69,14 @@
           />
           <PasswordConfirmation v-model="userData" />
           <div class="row justify-end">
-            <q-btn label="Criar conta" type="submit" color="primary" />
+            <q-btn label="Cancelar" to="/" rounded color="secondary" />
+            <q-btn
+              label="Criar conta"
+              type="submit"
+              rounded
+              class="q-ml-sm"
+              color="primary"
+            />
           </div>
         </q-form>
       </q-card-section>
