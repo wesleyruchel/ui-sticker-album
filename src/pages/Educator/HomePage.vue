@@ -57,7 +57,22 @@
                 <q-btn icon="close" flat round v-close-popup></q-btn>
               </q-card-section>
               <q-card-section>
-                <div class="text-h6">{{ shareCode }}</div>
+                <q-input
+                  v-model="shareCode"
+                  class="q-mb-md"
+                  style="font-size: 25px"
+                  square
+                  outlined
+                  readonly
+                >
+                  <template v-slot:append>
+                    <q-icon
+                      name="content_copy"
+                      class="cursor-pointer"
+                      @click="copyToClipboard(shareCode)"
+                    />
+                  </template>
+                </q-input>
               </q-card-section>
             </q-card>
           </q-dialog>
@@ -75,7 +90,7 @@ import { HandlerLoading } from "src/utils/loaderUtils";
 import useNotifications from "src/utils/notificationUtils";
 
 const router = useRouter();
-const { showErrorNotification } = useNotifications();
+const { showSuccessNotification, showErrorNotification } = useNotifications();
 
 const albums = ref({});
 const shareCode = ref("");
@@ -92,7 +107,6 @@ const fetchAlbumsData = async () => {
     const { items } = await fetchAlbums();
     albums.value = items;
   } catch (error) {
-    console.error(error);
     showErrorNotification(error.message);
   } finally {
     HandlerLoading.hide();
@@ -120,6 +134,21 @@ const handleShareAlbum = async (albumId) => {
       shareDialog.value = true;
     }
   } catch (error) {}
+};
+
+const copyToClipboard = (text) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      showSuccessNotification(
+        "Código de compartilhamento copiado para a área de transferência :)"
+      );
+    })
+    .catch((err) => {
+      showErrorNotification(
+        "Desculpe, não foi possível copiar o código de compartilhamento para a área de transferência :("
+      );
+    });
 };
 </script>
 
