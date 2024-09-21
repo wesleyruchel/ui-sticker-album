@@ -85,3 +85,39 @@ export const postSticker = async (data) => {
     throw formatError(error);
   }
 };
+
+export const getAlbumsStickersToCorrection = async () => {
+  try {
+    const response = await api.get(`/me/albums/shared/correction/stickers`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return formatSuccess(response);
+  } catch (error) {
+    throw formatError(error);
+  }
+};
+
+export const updateStickerStatus = async (stickerId, status) => {
+  try {
+    const response = await api.patch(
+      `/me/albums/stickers/${stickerId}`,
+      [
+        {
+          op: "replace",
+          path: "/status",
+          value: `${status}`,
+        },
+      ],
+      {
+        headers: {
+          "Content-Type": "application/json-patch+json",
+        },
+      }
+    );
+    return formatSuccess(response);
+  } catch (error) {
+    throw formatError(error);
+  }
+};
