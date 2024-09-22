@@ -26,12 +26,15 @@ export const fetchAlbums = async () => {
     });
 
     return {
-      items: response.data.map(({ id, title, description, blocked }) => ({
-        id,
-        title,
-        description,
-        isLocked: blocked || false,
-      })),
+      items: response.data.map(
+        ({ id, title, imageUrl, description, blocked }) => ({
+          id,
+          title,
+          imageUrl,
+          description,
+          isLocked: blocked || false,
+        })
+      ),
     };
   } catch (error) {
     throw formatError(error);
