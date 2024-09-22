@@ -4,11 +4,11 @@
       <div class="text-h5">Meus álbums</div>
       <div>
         <q-btn
-          unelevated
           rounded
           label="Novo"
           color="primary"
-          class="q-ml-sm"
+          icon="library_add"
+          class="button"
           @click="prompt = true"
         />
         <q-dialog v-model="prompt" persistent>
@@ -37,6 +37,7 @@
         </q-dialog>
       </div>
     </div>
+    <q-separator class="q-my-md q-mx-md" />
     <div class="row q-gutter-md section-card" flat bordered>
       <q-card
         v-for="album in albums"
@@ -46,7 +47,18 @@
         bordered
         @click="goToAlbum(album.id, album.title)"
       >
-        <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" />
+        <q-img :src="album.imageUrl">
+          <template v-slot:error>
+            <div class="q-pa-md flex flex-center full-width full-height">
+              <q-icon name="warning" size="64px" color="grey-4" />
+            </div>
+          </template>
+          <template v-if="!album.imageUrl">
+            <div class="q-pa-md flex flex-center full-width full-height">
+              <q-icon name="no_photography" size="64px" color="grey-4" />
+            </div>
+          </template>
+        </q-img>
         <q-card-section>
           <div class="text-h5 q-mt-sm q-mb-xs">{{ album.title }}</div>
           <div class="text-subtitle1 q-mb-sm">{{ album.description }}</div>
@@ -127,5 +139,12 @@ const goToAlbum = async (albumId, albumTitle) => {
 .section-card {
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.button {
+  width: 150px;
+  height: 36px;
+  min-width: 150px;
+  max-width: 150px;
 }
 </style>

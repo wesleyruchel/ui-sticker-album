@@ -13,6 +13,7 @@
         />
       </div>
     </div>
+    <q-separator class="q-my-md q-mx-md" />
     <div class="row q-gutter-md section-card" flat bordered>
       <q-card
         v-for="sticker in albumStickers"
