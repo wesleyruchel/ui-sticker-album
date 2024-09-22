@@ -2,7 +2,11 @@
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <q-header class="bg-grey-1 text-grey-8 q-py-xs">
       <q-toolbar>
-        <q-toolbar-title shrink class="text-weight-bold">
+        <q-toolbar-title
+          shrink
+          class="text-weight-bold wrap-title"
+          :style="{ fontFamily: 'Lobster, cursive', color: '#426b1f' }"
+        >
           APRENDIZADO INTERATIVO
         </q-toolbar-title>
         <q-space />
@@ -45,7 +49,7 @@
           </span>
         </div>
         <q-space />
-        <q-btn flat label="SOBRE" to="/about" />
+        <q-btn flat label="SOBRE" to="/sobre" />
       </q-toolbar>
     </q-footer>
     <q-page-container>
@@ -76,3 +80,16 @@ const logout = () => {
   router.push("/");
 };
 </script>
+<style scoped>
+.wrap-title {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+@media (max-width: 600px) {
+  .wrap-title {
+    max-width: 200px;
+    min-width: 200px;
+  }
+}
+</style>
