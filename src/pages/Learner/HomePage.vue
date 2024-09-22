@@ -14,7 +14,9 @@
         <q-dialog v-model="prompt" persistent>
           <q-card style="min-width: 350px">
             <q-card-section>
-              <div class="text-h6">Código do álbum compartilhado</div>
+              <div class="text-h6 text-primary">
+                Código do álbum compartilhado
+              </div>
             </q-card-section>
             <q-card-section class="q-pt-none">
               <q-input
