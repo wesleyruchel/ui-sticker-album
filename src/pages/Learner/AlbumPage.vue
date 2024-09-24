@@ -14,6 +14,12 @@
       </div>
     </div>
     <q-separator class="q-my-md q-mx-md" />
+    <div class="row q-mt-md q-mb-md q-mx-md text-caption">
+      * Ao colar uma figurinha automaticamente ela será encaminhada para a
+      correção. A indicação no topo direito da figurinha indicará se ela está
+      correta ou não. Não havendo indicação, a figurinha ainda não foi colada ou
+      corrigida.
+    </div>
     <div class="row q-gutter-md section-card" flat bordered>
       <q-card
         v-for="sticker in albumStickers"
@@ -22,6 +28,19 @@
         flat
         bordered
       >
+        <q-icon
+          v-if="userStickersStatus[sticker.id]"
+          :name="
+            userStickersStatus[sticker.id] === 'Aprovada'
+              ? 'check_circle'
+              : 'cancel'
+          "
+          class="absolute-top-right q-pa-md"
+          :color="
+            userStickersStatus[sticker.id] === 'Aprovada' ? 'green' : 'red'
+          "
+          size="25px"
+        />
         <q-card-section>
           <div class="text-h5 q-mt-sm q-mb-xs">{{ sticker.title }}</div>
           <div class="text-caption">
@@ -128,7 +147,7 @@ const albumId = ref(route.params.id || null);
 const albumName = ref(route.params.name || "");
 const albumStickers = ref({});
 const handlerSticker = ref({ id: 0 });
-const userStickers = ref({});
+const userStickersStatus = ref({});
 const userStickersImages = ref({});
 
 onMounted(() => {
@@ -149,13 +168,18 @@ const fetchAlbumStickersData = async (albumId) => {
       const postedStickers = await getPostedSticker(albumId);
 
       if (postedStickers) {
-        userStickers.value = postedStickers;
         albumStickers.value.forEach((s) => {
-          const data = postedStickers.data.find(
+          var data = postedStickers.data.find(
             (image) => image.stickerId === s.id
           );
 
           if (data) userStickersImages.value[s.id] = data.imageUrl;
+
+          data = postedStickers.data.find(
+            (status) => status.stickerId === s.id
+          );
+
+          if (data) userStickersStatus.value[s.id] = data.status;
         });
       }
     }
