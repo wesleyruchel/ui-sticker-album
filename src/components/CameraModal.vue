@@ -41,6 +41,18 @@
           class="full-width"
         />
         <q-btn
+          v-if="!photoTaken"
+          color="primary"
+          icon="change_circle"
+          :label="
+            currentCamera === 'environment'
+              ? 'Câmera frontal'
+              : 'Câmera traseira'
+          "
+          @click="switchCamera"
+          class="full-width q-mt-sm"
+        />
+        <q-btn
           v-close-popup
           icon="close"
           label="Cancelar"
@@ -72,6 +84,7 @@ const track = ref(null);
 const photoTaken = ref(false);
 const capturedImage = ref(null);
 const videoplayRef = ref(null);
+const currentCamera = ref("environment");
 
 onMounted(() => {
   if (navigator.mediaDevices.getUserMedia) {
@@ -82,7 +95,7 @@ onMounted(() => {
 const useCamera = async () => {
   try {
     const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: true,
+      video: { facingMode: currentCamera.value },
     });
     await nextTick();
 
@@ -143,6 +156,12 @@ const confirmPhoto = () => {
   isModalOpen.value = false;
   photoTaken.value = false;
   capturedImage.value = null;
+};
+
+const switchCamera = () => {
+  currentCamera.value = currentCamera.value === "user" ? "environment" : "user";
+  stopCamera();
+  useCamera();
 };
 
 watch(
