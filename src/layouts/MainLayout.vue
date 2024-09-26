@@ -5,7 +5,7 @@
         <q-toolbar-title
           shrink
           class="text-weight-bold wrap-title"
-          :style="{ fontFamily: 'Lobster, cursive', color: '#426b1f' }"
+          :style="{ fontFamily: 'Roboto', color: '#426b1f' }"
         >
           APRENDIZADO INTERATIVO
         </q-toolbar-title>
@@ -27,7 +27,7 @@
                 <q-item clickable @click="goToSettings">
                   <q-item-section>Configurações</q-item-section>
                 </q-item>
-                <q-item clickable>
+                <q-item clickable @click="goToAbout">
                   <q-item-section>Sobre</q-item-section>
                 </q-item>
                 <q-separator />
@@ -74,6 +74,10 @@ const goToProfile = () => {
 };
 
 const goToSettings = () => {};
+
+const goToAbout = () => {
+  router.push("/sobre");
+};
 
 const logout = () => {
   authStore.logout();
