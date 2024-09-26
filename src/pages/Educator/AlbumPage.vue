@@ -15,16 +15,15 @@
     <form @submit.prevent.stop="handleFormAlbumAction">
       <div class="row q-gutter-md q-pa-md items-start q-mx-md">
         <div class="col-12 col-md-2 image-container">
-          <q-img
-            :src="
-              albumData.imageUrl
-                ? albumData.imageUrl
-                : 'https://cdn.quasar.dev/img/parallax2.jpg'
-            "
-          >
+          <q-img :src="albumData.imageUrl">
             <template v-slot:error>
               <div class="q-pa-md flex flex-center full-width full-height">
-                <q-icon name="camera" color="grey-4" />
+                <q-icon name="warning" size="64px" color="grey-4" />
+              </div>
+            </template>
+            <template v-if="!albumData.imageUrl">
+              <div class="q-pa-md flex flex-center full-width full-height">
+                <q-icon name="add_photo_alternate" size="64px" color="grey-4" />
               </div>
             </template>
           </q-img>
