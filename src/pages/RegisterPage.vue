@@ -78,6 +78,35 @@
               color="primary"
             />
           </div>
+
+          <q-dialog v-model="isConfirming">
+            <q-card>
+              <q-card-section>
+                <div class="text-h6">Confirmação de Criação de Conta</div>
+              </q-card-section>
+
+              <q-card-section class="q-pt-none">
+                <p>
+                  Ao criar a conta, você está ciente de que a ferramenta está em
+                  fase de validação como MVP e podem ocorrer instabilidades.
+                </p>
+                <p>
+                  Recomendamos salvar sua senha em um local seguro, pois a opção
+                  de recuperação de senha ainda está em desenvolvimento.
+                </p>
+              </q-card-section>
+
+              <q-card-actions align="right">
+                <q-btn flat label="Cancelar" color="primary" v-close-popup />
+                <q-btn
+                  flat
+                  label="Confirmar"
+                  color="primary"
+                  @click="confirmAccount"
+                />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
         </q-form>
       </q-card-section>
     </q-card>
@@ -106,6 +135,8 @@ const userData = ref({
   confirmPassword: "",
 });
 
+const isConfirming = ref(false);
+
 const nameRules = [
   (val) => (val && val.length > 0) || "É necessário informar um nome.",
 ];
@@ -129,16 +160,19 @@ function validSubmit() {
   return true;
 }
 
-const handleSubmit = async () => {
+const handleSubmit = () => {
+  if (validSubmit()) isConfirming.value = true;
+};
+
+const confirmAccount = async () => {
   try {
-    if (validSubmit()) {
-      const response = await authStore.register(userData.value);
-      showSuccessNotification(response.message);
-      router.push("/login");
-    }
+    const response = await authStore.register(userData.value);
+    showSuccessNotification(response.message);
+    router.push("/login");
   } catch (error) {
-    console.error(error);
     showErrorNotification(error.message);
+  } finally {
+    if (isConfirming.value) isConfirming.value = false;
   }
 };
 </script>
