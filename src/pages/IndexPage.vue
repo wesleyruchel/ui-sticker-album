@@ -30,7 +30,7 @@
                 color="primary"
                 to="/cadastro"
               />
-              <h7>V1.0.0</h7>
+              <p>V1.0.0</p>
             </div>
           </div>
         </div>
