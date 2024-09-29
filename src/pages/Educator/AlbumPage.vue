@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md">
     <div class="row items-center justify-between q-mt-md q-mb-md q-mx-md">
-      <div class="text-h4">{{ albumId ? "Editar" : "Criar" }} Álbum</div>
+      <div class="text-h5">{{ albumId ? "Editar" : "Criar" }} Álbum</div>
       <q-btn
         rounded
         color="primary"
@@ -13,216 +13,259 @@
     </div>
     <q-separator class="q-my-md q-mx-md" />
     <form @submit.prevent.stop="handleFormAlbumAction">
-      <div class="row q-gutter-md q-pa-md items-start q-mx-md">
-        <div class="col-12 col-md-2 image-container">
-          <q-img :src="albumData.imageUrl">
-            <template v-slot:error>
-              <div class="q-pa-md flex flex-center full-width full-height">
-                <q-icon name="warning" size="64px" color="grey-4" />
-              </div>
-            </template>
-            <template v-if="!albumData.imageUrl">
-              <div class="q-pa-md flex flex-center full-width full-height">
-                <q-icon name="add_photo_alternate" size="64px" color="grey-4" />
-              </div>
-            </template>
-          </q-img>
-
+      <q-card class="q-mb-md rounded-card q-mx-md flat bordered">
+        <q-card-section class="q-pa-sm">
+          <q-list class="row">
+            <q-item class="col-12">
+              <q-item-section side class="q-flex q-flex-column q-align-start">
+                <q-img
+                  :src="albumData.imageUrl"
+                  style="width: 190px; height: 250px; object-fit: cover"
+                >
+                  <template v-slot:error>
+                    <div
+                      class="q-pa-md flex flex-center full-width full-height"
+                    >
+                      <q-icon name="warning" size="64px" color="grey-4" />
+                    </div>
+                  </template>
+                  <template v-if="!albumData.imageUrl">
+                    <div
+                      class="q-pa-md flex flex-center full-width full-height"
+                    >
+                      <q-icon
+                        name="add_photo_alternate"
+                        size="64px"
+                        color="grey-4"
+                      />
+                    </div>
+                  </template>
+                </q-img>
+                <q-btn
+                  rounded
+                  color="primary"
+                  label="Carregar capa"
+                  icon="upload"
+                  class="text-capitalize q-mt-sm"
+                  :disable="albumId && !albumData.editable"
+                  @click="uploadImage()"
+                />
+                <input
+                  type="file"
+                  ref="fileInput"
+                  @change="onFileChange"
+                  accept="image/*"
+                  style="display: none"
+                />
+              </q-item-section>
+            </q-item>
+            <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <q-item-section>
+                <q-input
+                  rounded
+                  outlined
+                  ref="albumDataTitleRef"
+                  v-model="albumData.title"
+                  label="Título *"
+                  class="q-mb-md"
+                  :disable="albumId && !albumData.editable"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val && val.length > 0) ||
+                      'É necessário informar um título para o álbum.',
+                  ]"
+                />
+              </q-item-section>
+            </q-item>
+            <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <q-item-section>
+                <q-input
+                  rounded
+                  outlined
+                  v-model="albumData.description"
+                  label="Descrição"
+                  type="textarea"
+                  class="q-mb-md"
+                  :disable="albumId && !albumData.editable"
+                />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+        <q-card-actions align="right">
           <q-btn
             rounded
+            class="button"
             color="primary"
-            label="Carregar"
-            icon="upload"
-            :disable="albumId && !albumData.editable"
-            @click="uploadImage()"
+            :label="
+              albumId
+                ? albumData.editable
+                  ? 'Salvar'
+                  : 'Editar'
+                : 'Criar novo'
+            "
+            :icon="albumId ? (albumData.editable ? 'save' : 'edit') : 'add'"
+            @click="
+              handleFormAlbumAction(
+                albumId ? (albumData.editable ? 'save' : 'edit') : 'add'
+              )
+            "
           />
-          <input
-            type="file"
-            ref="fileInput"
-            @change="onFileChange"
-            accept="image/*"
-            style="display: none"
-          />
-        </div>
-        <div class="col-12 col-md-9">
-          <q-input
+          <q-btn
+            v-if="albumData.editable"
             rounded
-            outlined
-            ref="albumDataTitleRef"
-            v-model="albumData.title"
-            label="Título *"
-            class="q-mb-md"
-            :disable="albumId && !albumData.editable"
-            lazy-rules
-            :rules="[
-              (val) =>
-                (val && val.length > 0) ||
-                'É necessário informar um título para o álbum.',
-            ]"
+            color="negative"
+            label="Cancelar"
+            icon="cancel"
+            @click="handleFormAlbumAction('cancel')"
           />
-          <q-input
-            rounded
-            outlined
-            v-model="albumData.description"
-            label="Descrição"
-            type="textarea"
-            class="q-mb-md"
-            :disable="albumId && !albumData.editable"
-          />
-        </div>
-      </div>
-      <div class="row justify-end q-pa-md q-mx-md">
-        <q-btn
-          rounded
-          class="button"
-          color="primary"
-          :label="
-            albumId ? (albumData.editable ? 'Salvar' : 'Editar') : 'Criar novo'
-          "
-          :icon="albumId ? (albumData.editable ? 'save' : 'edit') : 'add'"
-          @click="
-            handleFormAlbumAction(
-              albumId ? (albumData.editable ? 'save' : 'edit') : 'add'
-            )
-          "
-        />
-        <q-btn
-          v-if="albumData.editable"
-          rounded
-          color="negative"
-          label="Cancelar"
-          icon="cancel"
-          @click="handleFormAlbumAction('cancel')"
-        />
-      </div>
+        </q-card-actions>
+      </q-card>
     </form>
     <q-separator class="q-my-md q-mx-md" />
     <div class="q-mx-md">
       <div class="row items-center justify-between q-mt-md q-mb-md">
-        <div class="text-h4">Criar figurinha</div>
+        <div class="text-h5">Criar figurinha</div>
       </div>
       <form @submit.prevent.stop="handleFormStickerAction">
         <q-card class="q-mb-md rounded-card">
-          <q-card-section class="row items-center justify-between">
-            <div class="col-10">
-              <q-input
-                rounded
-                outlined
-                ref="formStickerTitleRef"
-                v-model="formSticker.title"
-                label="Título *"
-                class="q-mb-sm"
-                :disable="!formSticker.editable"
-                lazy-rules
-                :rules="[
-                  (val) =>
-                    (val && val.length > 0) ||
-                    'É necessário informar um título para a figurinha.',
-                ]"
-              />
-              <q-input
-                rounded
-                outlined
-                ref="formStickerDescriptionRef"
-                v-model="formSticker.description"
-                label="Descrição *"
-                type="textarea"
-                :disable="!formSticker.editable"
-                lazy-rules
-                :rules="[
-                  (val) =>
-                    (val && val.length > 0) ||
-                    'É necessário informar uma descrição para a figurinha.',
-                ]"
-              />
-            </div>
-            <div class="col-2 row items-center">
-              <q-btn
-                rounded
-                color="primary"
-                :disable="!albumId"
-                :label="formSticker.editable ? 'Salvar' : 'Criar nova'"
-                :icon="formSticker.editable ? 'save' : 'add'"
-                @click="handleFormStickerAction('add')"
-                class="q-ml-md"
-              />
-              <q-btn
-                v-if="formSticker.editable"
-                rounded
-                color="negative"
-                label="Cancelar"
-                icon="cancel"
-                @click="handleFormStickerAction('cancel')"
-                class="q-ml-md"
-              />
-            </div>
+          <q-card-section class="q-pa-sm">
+            <q-list class="row">
+              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item-section>
+                  <q-input
+                    rounded
+                    outlined
+                    ref="formStickerTitleRef"
+                    v-model="formSticker.title"
+                    label="Título *"
+                    class="q-mb-sm"
+                    :disable="!formSticker.editable"
+                    lazy-rules
+                    :rules="[
+                      (val) =>
+                        (val && val.length > 0) ||
+                        'É necessário informar um título para a figurinha.',
+                    ]"
+                  />
+                </q-item-section>
+              </q-item>
+              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item-section>
+                  <q-input
+                    rounded
+                    outlined
+                    ref="formStickerDescriptionRef"
+                    v-model="formSticker.description"
+                    label="Descrição *"
+                    type="textarea"
+                    :disable="!formSticker.editable"
+                    lazy-rules
+                    :rules="[
+                      (val) =>
+                        (val && val.length > 0) ||
+                        'É necessário informar uma descrição para a figurinha.',
+                    ]"
+                  />
+                </q-item-section>
+              </q-item>
+            </q-list>
           </q-card-section>
+          <q-card-actions align="right">
+            <q-btn
+              rounded
+              color="primary"
+              :disable="!albumId"
+              :label="formSticker.editable ? 'Salvar' : 'Criar nova'"
+              :icon="formSticker.editable ? 'save' : 'add'"
+              @click="handleFormStickerAction('add')"
+              class="q-ml-md"
+            />
+            <q-btn
+              v-if="formSticker.editable"
+              rounded
+              color="negative"
+              label="Cancelar"
+              icon="cancel"
+              @click="handleFormStickerAction('cancel')"
+              class="q-ml-md"
+            />
+          </q-card-actions>
         </q-card>
       </form>
       <div class="row items-center justify-between q-mt-md q-mb-md">
-        <div class="text-h4">Figurinhas do álbum</div>
+        <div class="text-h5">Figurinhas do álbum</div>
       </div>
       <div v-for="(card, index) in stickersAlbum" :key="index" class="q-mb-md">
         <q-card class="q-mb-md rounded-card">
-          <q-card-section class="row items-center justify-between">
-            <div class="col-10">
-              <q-input
-                rounded
-                outlined
-                v-model="card.title"
-                label="Título"
-                :disable="!card.editable"
-                :rules="[
-                  (val) =>
-                    (val && val.length > 0) ||
-                    'É necessário informar um título para a figurinha.',
-                ]"
-              />
-              <q-input
-                rounded
-                outlined
-                v-model="card.description"
-                label="Descrição"
-                type="textarea"
-                :disable="!card.editable"
-                :rules="[
-                  (val) =>
-                    (val && val.length > 0) ||
-                    'É necessário informar uma descrição para a figurinha.',
-                ]"
-              />
-            </div>
-            <div class="col-2 row items-center">
-              <q-btn
-                rounded
-                color="primary"
-                :label="card.editable ? 'Salvar' : 'Editar'"
-                :icon="card.editable ? 'save' : 'edit'"
-                @click="
-                  handleCardStickerEdit(index, card.editable ? 'save' : 'edit')
-                "
-                class="q-ml-md"
-              />
-              <q-btn
-                v-if="card.editable"
-                rounded
-                color="negative"
-                icon="cancel"
-                @click="handleCardStickerEdit(index, 'cancel')"
-                label="Cancelar"
-                class="q-ml-md"
-              />
-              <q-btn
-                v-if="!card.editable"
-                rounded
-                color="negative"
-                icon="delete"
-                label="Excluir"
-                @click="removeSticker(index)"
-                class="q-ml-md"
-              />
-            </div>
+          <q-card-section class="q-pa-sm">
+            <q-list class="row">
+              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item-section>
+                  <q-input
+                    rounded
+                    outlined
+                    v-model="card.title"
+                    label="Título"
+                    :disable="!card.editable"
+                    :rules="[
+                      (val) =>
+                        (val && val.length > 0) ||
+                        'É necessário informar um título para a figurinha.',
+                    ]"
+                  />
+                </q-item-section>
+              </q-item>
+              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item-section>
+                  <q-input
+                    rounded
+                    outlined
+                    v-model="card.description"
+                    label="Descrição"
+                    type="textarea"
+                    :disable="!card.editable"
+                    :rules="[
+                      (val) =>
+                        (val && val.length > 0) ||
+                        'É necessário informar uma descrição para a figurinha.',
+                    ]"
+                  />
+                </q-item-section>
+              </q-item>
+            </q-list>
           </q-card-section>
+          <q-card-actions align="right">
+            <q-btn
+              rounded
+              color="primary"
+              :label="card.editable ? 'Salvar' : 'Editar'"
+              :icon="card.editable ? 'save' : 'edit'"
+              @click="
+                handleCardStickerEdit(index, card.editable ? 'save' : 'edit')
+              "
+              class="q-ml-md"
+            />
+            <q-btn
+              v-if="card.editable"
+              rounded
+              color="negative"
+              icon="cancel"
+              @click="handleCardStickerEdit(index, 'cancel')"
+              label="Cancelar"
+              class="q-ml-md"
+            />
+            <q-btn
+              v-if="!card.editable"
+              rounded
+              color="negative"
+              icon="delete"
+              label="Excluir"
+              @click="removeSticker(index)"
+              class="q-ml-md"
+            />
+          </q-card-actions>
         </q-card>
       </div>
     </div>
@@ -531,10 +574,6 @@ const removeSticker = async (index) => {
   font-weight: bold;
 }
 
-.text-h4 {
-  font-weight: bold;
-}
-
 .rounded-card {
   border-radius: 12px;
 }
@@ -549,11 +588,5 @@ const removeSticker = async (index) => {
   height: 36px;
   min-width: 150px;
   max-width: 150px;
-}
-
-.image-container {
-  width: 350px;
-  height: 400px;
-  position: relative;
 }
 </style>
