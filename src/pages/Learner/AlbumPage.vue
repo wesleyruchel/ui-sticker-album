@@ -62,8 +62,23 @@
             />
           </div>
         </q-card-section>
-        <q-card-section>
-          <q-img :src="userStickersImages[sticker.id]">
+        <q-card-section
+          style="
+            height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <q-img
+            :src="userStickersImages[sticker.id]"
+            :style="{
+              maxWidth: '100%',
+              maxHeight: '100%',
+              objectFit: 'contain',
+            }"
+            @click="openImage(userStickersImages[sticker.id])"
+          >
             <template v-slot:error>
               <div class="q-pa-md flex flex-center full-width full-height">
                 <q-icon name="warning" size="64px" color="grey-4" />
@@ -127,6 +142,17 @@
     accept="image/*"
     style="display: none"
   />
+
+  <q-dialog v-model="showImage">
+    <q-img :src="selectedImage" :style="{ width: '100%', height: 'auto' }" />
+    <q-icon
+      name="close"
+      size="md"
+      color="white"
+      class="dialog-close-icon"
+      @click="showImage = false"
+    />
+  </q-dialog>
 </template>
 
 <script setup>
@@ -149,6 +175,8 @@ const albumStickers = ref({});
 const handlerSticker = ref({ id: 0 });
 const userStickersStatus = ref({});
 const userStickersImages = ref({});
+const showImage = ref(false);
+const selectedImage = ref(false);
 
 onMounted(() => {
   fetchAlbumStickersData(albumId.value);
@@ -297,6 +325,12 @@ const handlePhotoCaptured = async (photo) => {
 const handleCloseCameraModal = () => {
   cameraModalOpen.value = false;
 };
+
+const openImage = (url) => {
+  console.log(1);
+  selectedImage.value = url;
+  showImage.value = true;
+};
 </script>
 
 <style scoped>
@@ -330,5 +364,24 @@ const handleCloseCameraModal = () => {
   height: 36px;
   min-width: 150px;
   max-width: 150px;
+}
+
+.q-dialog__inner {
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.dialog-close-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dialog-close-icon:hover {
+  background: rgba(0, 0, 0, 0.8);
 }
 </style>
