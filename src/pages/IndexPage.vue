@@ -30,7 +30,7 @@
                 color="primary"
                 to="/cadastro"
               />
-              <p>V1.0.0</p>
+              <p>Versão {{ appVersion }}</p>
             </div>
           </div>
         </div>
@@ -40,7 +40,9 @@
   </q-layout>
 </template>
 
-<script setup></script>
+<script setup>
+const appVersion = import.meta.env.VITE_APP_VERSION;
+</script>
 
 <style scoped>
 .full-height-page {
