@@ -15,9 +15,7 @@
             <span>Olá,</span> <span class="text-bold">{{ firstName }}</span>
             <br /><span class="text-caption text-grey-6">{{ role }}</span>
           </div>
-          <q-btn round dense flat color="grey-8" icon="notifications">
-            <q-badge color="red" text-color="white" floating> 2 </q-badge>
-          </q-btn>
+          <q-btn round dense flat color="grey-8" icon="notifications"> </q-btn>
           <q-btn round flat icon="person">
             <q-menu transition-show="flip-right" transition-hide="flip-left">
               <q-list style="min-width: 100px">
