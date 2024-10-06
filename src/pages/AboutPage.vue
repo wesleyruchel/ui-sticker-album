@@ -5,7 +5,7 @@
       <q-toolbar-title
         shrink
         class="text-weight-bold wrap-title"
-        :style="{ fontFamily: 'Lobster, cursive', color: '#426b1f' }"
+        :style="{ fontFamily: 'Roboto', color: '#426b1f' }"
       >
         APRENDIZADO INTERATIVO
       </q-toolbar-title>
@@ -20,8 +20,27 @@
             </q-card-section>
             <q-card-section>
               <p class="text-body1">
-                É um MVP de uma ferramenta de autoria inspirada visualmente em
-                álbuns de figurinhas.
+                A AiApp ou Aprendizado Interativo é uma ferramenta de autoria
+                multidisciplinar, inspirada visualmente em álbuns de figurinhas.
+                Tem como pilares facilitar a criação de recursos educacionais e
+                promover o aprendizado através da interatividade e do lúdico.
+              </p>
+              <p class="text-body1">
+                Atualmente, está em fase de MVP (Produto Mínimo Viável), o que
+                significa que a ferramenta possui os recursos essenciais para
+                validar sua proposta de valor.
+              </p>
+              <p class="text-body1">
+                É resultado do trabalho de conclusão do curso Sistemas de
+                Informação da Universidade Feevele e foi desenvolvida pelo
+                graduando Wesley K. Rüchel.
+              </p>
+              <p class="text-body1">
+                Para dúvidas, problemas ou sugestões, entre em contato pelo
+                e-mail
+                <a href="mailto:wesleyruchel@gmail.com?subject=Contato AiApp"
+                  >wesleyruchel@gmail.com</a
+                >
               </p>
             </q-card-section>
           </q-card>
