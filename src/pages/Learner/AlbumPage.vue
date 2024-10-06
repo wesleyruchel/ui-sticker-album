@@ -329,7 +329,6 @@ const handleCloseCameraModal = () => {
 };
 
 const openImage = (url) => {
-  console.log(1);
   selectedImage.value = url;
   showImage.value = true;
 };
