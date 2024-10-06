@@ -14,6 +14,16 @@
       </div>
     </div>
     <q-separator class="q-my-md q-mx-md" />
+    <div class="q-my-md q-mx-md">
+      <q-toggle
+        v-model="isAll"
+        checked-icon="check"
+        color="green"
+        label="Lista todas (inclusive corrigidas)"
+        unchecked-icon="clear"
+        @update:model-value="fetchAlbumsStickersToCorrectionData(isAll)"
+      />
+    </div>
     <div class="row q-gutter-md section-card" flat bordered>
       <q-card
         v-for="(sticker, index) in stickers"
@@ -162,19 +172,20 @@ const { showSuccessNotification, showErrorNotification } = useNotifications();
 const stickers = ref({});
 const showImage = ref(false);
 const selectedImage = ref(false);
+const isAll = ref(false);
 
 onMounted(() => {
-  fetchAlbumsStickersToCorrectionData();
+  fetchAlbumsStickersToCorrectionData(isAll.value);
 });
 
 const goToHome = () => {
   router.push(getDynamicRoute("inicio"));
 };
 
-const fetchAlbumsStickersToCorrectionData = async () => {
+const fetchAlbumsStickersToCorrectionData = async (all) => {
   try {
     HandlerLoading.show("Aguarde... Carregando...");
-    const response = await getAlbumsStickersToCorrection();
+    const response = await getAlbumsStickersToCorrection(all);
 
     if (response) {
       stickers.value = response.data;

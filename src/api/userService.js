@@ -89,13 +89,16 @@ export const postSticker = async (data) => {
   }
 };
 
-export const getAlbumsStickersToCorrection = async () => {
+export const getAlbumsStickersToCorrection = async (allStickers) => {
   try {
-    const response = await api.get(`/me/albums/shared/correction/stickers`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await api.get(
+      `/me/albums/shared/correction/stickers/${allStickers}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return formatSuccess(response);
   } catch (error) {
     throw formatError(error);
