@@ -266,6 +266,7 @@ const onFileChange = (event) => {
             if (posted) {
               userStickersImages.value[handlerSticker.value.id] =
                 e.target.result;
+              userStickersStatus.value[handlerSticker.value.id] = null;
               showSuccessNotification("Uhul! Nova figurinha adicionada!");
             }
           }
@@ -311,6 +312,7 @@ const handlePhotoCaptured = async (photo) => {
 
       if (posted) {
         userStickersImages.value[handlerSticker.value.id] = photo;
+        userStickersStatus.value[handlerSticker.value.id] = null;
         showSuccessNotification("Uhul! Nova figurinha adicionada!");
         capturedImage.value = null;
       }
