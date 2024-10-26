@@ -78,7 +78,6 @@
 
 .my-card {
   width: 100%;
-  height: 80vh;
 }
 
 .text-h5 {
